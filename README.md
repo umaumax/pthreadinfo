@@ -10,7 +10,8 @@ g++ -std=c++11 main.cpp -Wall -ldl -lunwind -lpthread -shared -fPIC -o libpthrea
 g++ -std=c++11 main.cpp -Wall -ldl -lpthread -shared -fPIC -o libpthreadinfo.so
 ```
 
-if you want to disable `libuwind` add `-DDISABLE_UNWIND` (use glibc backrace)
+* default setting is using `libuwind`
+  * if you want to disable `libuwind` add `-DDISABLE_UNWIND` (glibc backrace is enabled)
 
 ## how to use
 ``` bash
@@ -21,7 +22,7 @@ LD_PRELOAD=./libpthreadinfo.so ./thread-app
 DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=./libpthreadinfo.so ./thread-app
 ```
 
-* if you want to display thread info to stderr set `BACKTRACER_STDERR=1` environment variable
+* if you want to display thread info to stderr, set `BACKTRACER_STDERR=1` environment variable
 * `BACKTRACER_OUTFILE=threadinfo.log`: filepath to output each thread backtrace info
 
 ## examples
@@ -32,7 +33,7 @@ $CREATED_TID created by $CREATOR_TID
 $BACKTRACE
 ```
 
-### glibc tracer at Mac OS X
+### glibc backtrace at Mac OS X
 e.g.
 ```
 [1624110834.316724]
