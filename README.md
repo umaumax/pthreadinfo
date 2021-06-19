@@ -1,10 +1,12 @@
 # pthreadinfo
 
+This tool generates pthred backtrace infomation automatically.
+
 ## how to build
 ``` bash
 # for linux
 g++ -std=c++11 main.cpp -Wall -ldl -lunwind -lpthread -shared -fPIC -o libpthreadinfo.so
-# for Mac OS X
+# for Mac OS X (no need to add -lunwind to use unwind)
 g++ -std=c++11 main.cpp -Wall -ldl -lpthread -shared -fPIC -o libpthreadinfo.so
 ```
 
