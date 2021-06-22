@@ -22,6 +22,11 @@ LD_PRELOAD=./libpthreadinfo.so ./thread-app
 DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=./libpthreadinfo.so ./thread-app
 ```
 
+with sudo, without ASLR(Linux)
+``` bash
+sudo env LD_PRELOAD=./libpthreadinfo.so setarch $(uname -m) -R ./thread-app
+```
+
 * if you want to display thread info to stderr, set `BACKTRACER_STDERR=1` environment variable
 * `BACKTRACER_OUTFILE=threadinfo.log`: filepath to output each thread backtrace info
 
@@ -163,5 +168,4 @@ e.g.
 [10] from 12  thread-app                          0x000000010463122c _ZN10ThreadPoolC1EiNSt3__18functionIFviEEE + 40
 [11] from 13  thread-app                          0x0000000104630fe4 main + 848
 [12] from 14  libdyld.dylib                       0x0000000196abd450 start + 4
-
 ```
