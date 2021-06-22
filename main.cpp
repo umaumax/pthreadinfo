@@ -37,23 +37,48 @@ const char *unw_strerror(int err_code) {
 #endif
 #endif
 
-pid_t gettid() {
 #if __APPLE__
+pid_t gettid() {
   uint64_t tid64 = 0;
   pthread_threadid_np(nullptr, &tid64);
   return static_cast<pid_t>(tid64);
   // deprecated way
   // return syscall(SYS_thread_selfid);
-#else
-  return syscall(SYS_gettid);
-#endif
 }
-
 pid_t get_pthread_tid(pthread_t *pthread) {
   uint64_t tid64 = 0;
   pthread_threadid_np(*pthread, &tid64);
   return static_cast<pid_t>(tid64);
 }
+#elif __linux__
+struct pthread {
+#if __x86_64__ == 1
+  union {
+    uint8_t __padding[720];
+  };
+#elif __ARM_ARCH == 7
+  union {
+    uint8_t __padding[104];
+  };
+#else
+#error "Non supported arch"
+#endif
+  /* Thread ID - which is also a 'is this thread descriptor (and
+           therefore stack) used' flag.  */
+  pid_t tid;
+
+  /* Process ID - thread group ID in kernel speak.  */
+  pid_t pid;
+};
+
+pid_t gettid() { return syscall(SYS_gettid); }
+
+pid_t get_pthread_tid(pthread_t *pthread_ptr) {
+  return (reinterpret_cast<pthread *>(*pthread_ptr))->tid;
+}
+#else
+#error "Non supported OS"
+#endif
 
 class BackTracer {
  public:
