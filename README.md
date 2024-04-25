@@ -1,6 +1,6 @@
 # pthreadinfo
 
-This tool generates pthread backtrace infomation automatically.
+This tool generates pthread backtrace information automatically.
 
 ## how to build
 ``` bash
